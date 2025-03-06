@@ -42,12 +42,14 @@ const Pagination = ({
     />
   );
 
-  if (totalPages <= 1 && hasCompletedTodos)
+  if (hasCompletedTodos && totalPages <= 1)
     return (
       <PaginationContainer className={className}>
         {RemoveButton}
       </PaginationContainer>
     );
+
+  if (totalPages === 1) return null;
 
   return (
     <PaginationContainer className={className}>

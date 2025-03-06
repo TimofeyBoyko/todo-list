@@ -10,8 +10,8 @@ describe("Pagination Component", () => {
     jest.clearAllMocks();
   });
 
-  it("renders pagination with a single page when totalPages is 1 and hasCompletedTodos is false", () => {
-    render(
+  it("renders nothing when totalPages is 1 and hasCompletedTodos is false", () => {
+    const { container } = render(
       <Pagination
         currentPage={1}
         totalPages={1}
@@ -20,8 +20,11 @@ describe("Pagination Component", () => {
       />
     );
     
-    // Should render a single page button
-    expect(screen.getByText("1")).toBeInTheDocument();
+    // Should not render anything
+    expect(container.firstChild).toBeNull();
+    
+    // Should not render page buttons
+    expect(screen.queryByText("1")).not.toBeInTheDocument();
     
     // Should not render the Remove completed button
     expect(screen.queryByText("Remove completed")).not.toBeInTheDocument();
