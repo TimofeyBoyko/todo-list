@@ -19,13 +19,13 @@ describe("Pagination Component", () => {
         hasCompletedTodos={false}
       />
     );
-    
+
     // Should not render anything
     expect(container.firstChild).toBeNull();
-    
+
     // Should not render page buttons
     expect(screen.queryByText("1")).not.toBeInTheDocument();
-    
+
     // Should not render the Remove completed button
     expect(screen.queryByText("Remove completed")).not.toBeInTheDocument();
   });
@@ -40,25 +40,25 @@ describe("Pagination Component", () => {
         onRemoveCompleted={mockOnRemoveCompleted}
       />
     );
-    
+
     // Should not render page buttons
     expect(screen.queryByText("1")).not.toBeInTheDocument();
-    
+
     // Should render the Remove completed button
     expect(screen.getByText("Remove completed")).toBeInTheDocument();
   });
 
-  it("renders pagination buttons correctly", () => {
+  it("renders all pagination buttons when totalPages <= 3", () => {
     render(
       <Pagination
         currentPage={2}
-        totalPages={5}
+        totalPages={3}
         onPageChange={mockOnPageChange}
       />
     );
 
     // Check if all page buttons are rendered
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 3; i++) {
       expect(screen.getByText(i.toString())).toBeInTheDocument();
     }
 
@@ -68,6 +68,73 @@ describe("Pagination Component", () => {
       "aria-current",
       "page"
     );
+  });
+
+  it("renders specific pagination buttons when on first page", () => {
+    render(
+      <Pagination
+        currentPage={1}
+        totalPages={5}
+        onPageChange={mockOnPageChange}
+      />
+    );
+
+    // Should show pages 1, 2, and the last page (5)
+    expect(screen.getByText("1")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+    
+    // Pages 3 and 4 should not be visible
+    expect(screen.queryByText("3")).not.toBeInTheDocument();
+    expect(screen.queryByText("4")).not.toBeInTheDocument();
+  });
+
+  it("renders specific pagination buttons when on last page", () => {
+    render(
+      <Pagination
+        currentPage={8}
+        totalPages={8}
+        onPageChange={mockOnPageChange}
+      />
+    );
+
+    // Should show first page, second-to-last page, and last page
+    expect(screen.getByText("1")).toBeInTheDocument();
+    expect(screen.getByText("7")).toBeInTheDocument();
+    expect(screen.getByText("8")).toBeInTheDocument();
+    
+    // Pages 2-6 should not be visible
+    for (let i = 2; i <= 6; i++) {
+      expect(screen.queryByText(i.toString())).not.toBeInTheDocument();
+    }
+  });
+
+  it("renders pagination with correct buttons for middle pages", () => {
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
+    );
+
+    // Should show first page
+    expect(screen.getByText("1")).toBeInTheDocument();
+    
+    // Should show current page and neighbors
+    expect(screen.getByText("4")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+    expect(screen.getByText("6")).toBeInTheDocument();
+
+    // Should show last page
+    expect(screen.getByText("10")).toBeInTheDocument();
+
+    // Pages 2, 3, 7, 8, 9 should not be visible
+    expect(screen.queryByText("2")).not.toBeInTheDocument();
+    expect(screen.queryByText("3")).not.toBeInTheDocument();
+    expect(screen.queryByText("7")).not.toBeInTheDocument();
+    expect(screen.queryByText("8")).not.toBeInTheDocument();
+    expect(screen.queryByText("9")).not.toBeInTheDocument();
   });
 
   it("calls onPageChange when a page button is clicked", async () => {

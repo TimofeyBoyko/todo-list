@@ -11,7 +11,7 @@ describe("Card Component", () => {
     const { container } = render(<Card>Test Content</Card>);
     const cardElement = container.firstChild;
     expect(cardElement).toHaveClass("w-full");
-    expect(cardElement).toHaveClass("md:w-[500px]");
+    expect(cardElement).toHaveClass("md:w-[550px]");
     expect(cardElement).toHaveClass("h-screen");
     expect(cardElement).toHaveClass("md:h-[500px]");
   });

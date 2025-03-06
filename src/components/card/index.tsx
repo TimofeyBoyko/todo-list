@@ -5,7 +5,7 @@ const Card = ({ children, className = "" }: CardProps) => {
     <div
       className={`
       w-full 
-      md:w-[500px] 
+      md:w-[550px] 
       h-screen 
       md:h-[500px] 
       bg-white 
